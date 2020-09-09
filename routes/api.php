@@ -28,9 +28,18 @@ Route::group([
     Route::post('me', 'AuthController@me');
 });
 
-Route::get('/persons','PersonController@getAllPersons');
-Route::post('/persons','PersonController@create');
-Route::put('/persons/{id}','PersonController@update');
-Route::delete('/persons/{id}','PersonController@delete');
+Route::group([
+    'prefix' => 'person'
+], function ($router) {
+    Route::get('/','PersonController@getAllPersons');
+    Route::post('/','PersonController@create');
+    Route::put('/{id}','PersonController@update');
+    Route::delete('/{id}','PersonController@delete');
+});
 
+Route::group([
+    'prefix' => 'country'
+], function($router){
+    Route::get('/','CountryController@getCountrys');
+});
 

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Country;
 use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model{
@@ -13,6 +14,11 @@ class Person extends Model{
         'lastname',
         'age',
         'email',
+        'country_id'
     ];
+
+    public function country(){
+        return $this->belongsTo(Country::class, 'country_id');
+    }
 
 }

@@ -7,20 +7,11 @@ use App\Person;
 
 class PersonController extends Controller
 {
-    public $status_code_ok = 200;
-
-    public function __construct(){
-        $this->middleware('jwt');
-    }
 
     function getAllPersons(){
-        $persons = Person::orderBy('id','desc')->get();
+        $persons = Person::with(['country'])->orderBy('id','desc')->get();
 
-        return response()->json([
-            "code" => 200,
-            "status" => "ok",
-            "data" => $persons
-        ],$this->status_code_ok);
+        return $this->response($persons,$this->status_code_ok,null);
     }
 
     function create(Request $request){
@@ -30,13 +21,10 @@ class PersonController extends Controller
         $person->lastname = $request->lastname;
         $person->age = $request->age;
         $person->email = $request->email;
+        $person->country_id = $request->country_id;
         $person->save();
 
-        return response()->json([
-            "code" => 200,
-            "status" => "ok",
-            "data" => $person
-        ],$this->status_code_ok);
+        return $this->response($person,$this->status_code_ok,null);
     }
 
     function update(Request $request, $id){
@@ -47,21 +35,13 @@ class PersonController extends Controller
         $person->email = $request->email;
         $person->update();
 
-        return response()->json([
-            "code" => 200,
-            "status" => "ok",
-            "data" => $person
-        ],$this->status_code_ok);
+        return $this->response($persons,$this->status_code_ok,null);
     }
 
     function delete($id){
         $person = Person::findOrFail($id);
         $person->delete();
 
-        return response()->json([
-            "code" => 200,
-            "status" => "ok",
-            "data" => null
-        ],$this->status_code_ok);
+        return $this->response(null,$this->status_code_ok,null);
     }
 }
